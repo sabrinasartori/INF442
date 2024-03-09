@@ -52,7 +52,7 @@ double** prepare_matrix(int rows, int columns) {
 double compute_mean (double values[], int length) {
     double sum = 0;
     for (int i = 0; i < length; ++i){
-        sum += values[i]
+        sum += values[i];
     }
     return sum / length;
 }
@@ -66,11 +66,11 @@ double compute_mean (double values[], int length) {
  */
 double compute_variance (double values[], int length) {
     double mean = compute_mean(values, length);
-    double sum = 0.0
-    for (int i = 0; i < lenght; ++i){
-        sum += pow(values[i]-mean, 2)
+    double sum = 0.0;
+    for (int i = 0; i < length; ++i){
+        sum += pow(values[i]-mean, 2);
     }
-    return sum/lenght;
+    return sum/length;
 }
 
 
@@ -83,8 +83,8 @@ double compute_variance (double values[], int length) {
  * @return the variance of the values in the array
  */
 double compute_sample_variance (double values[], int length) {
-    double variance = compute_variance(values, lenght)
-    double unb_variance = variance / (lenght-1) * lenght
+    double variance = compute_variance(values, length);
+    double unb_variance = variance / (length-1) * length;
     return unb_variance;
 }
 
@@ -97,7 +97,7 @@ double compute_sample_variance (double values[], int length) {
  * @return the variance of the values in the array
  */
 double compute_standard_deviation (double values[], int length) {
-    double variance = compute_variance(values, lenght)
+    double variance = compute_variance(values, length);
     return sqrt(variance);
 }
 
@@ -110,7 +110,7 @@ double compute_standard_deviation (double values[], int length) {
  * @return the variance of the values in the array
  */
 double compute_sample_standard_deviation (double values[], int length) {
-    double unb_variance = compute_sample_variance(values, lenght)
+    double unb_variance = compute_sample_variance(values, length);
     return sqrt(unb_variance);
 }
 
@@ -127,7 +127,15 @@ double compute_sample_standard_deviation (double values[], int length) {
  * @param columns the number of columns
  */
 void print_matrix (double** matrix, int rows, int columns) {
-    // TODO
+    for (int i = 0; i < rows; ++i){
+        for (int j = 0; j < columns; ++j){
+            std::cout << matrix[i][j];
+            if (j < columns-1){
+                std::cout << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
 }
 
 /** 
@@ -139,9 +147,9 @@ void print_matrix (double** matrix, int rows, int columns) {
  * @param row the array where the extracted values are to be placed
  */
 void get_row (double** matrix, int columns, int index, double row[]) {
-    // Clean out completely the row 
-
-    // TODO
+    for (int j = 0; j < columns; ++j){
+        row[j] = matrix[index][j];
+    }
 }
 
 /** 
@@ -153,9 +161,9 @@ void get_row (double** matrix, int columns, int index, double row[]) {
  * @param column the array where the extracted values are to be placed
  */
 void get_column (double** matrix, int rows, int index, double column[]) {
-    // Clean out completely the column 
-
-    // TODO
+    for (int i = 0; i < rows; ++i){
+        column[i] = matrix[i][index];
+    }
 }
 
 /****************************************************
@@ -170,9 +178,13 @@ void get_column (double** matrix, int rows, int index, double column[]) {
  * @return the covariance of the two vectors
  */
 double compute_covariance(double values1[], double values2[], int length) {
-    // TODO
-    // Do not forget to replace this return by a correct one!
-    return 0;
+    double sum = 0.0;
+    double mean1 = compute_mean(values1, length);
+    double mean2 = compute_mean(values1, length);
+    for (int i = 0; i < length; ++i){
+        sum += (values1[i]-mean1)*(values2[i]-mean2);
+    }
+    return sum/length;
 }
 
 /**
@@ -184,9 +196,11 @@ double compute_covariance(double values1[], double values2[], int length) {
  * @return the correlation of the two vectors
  */
 double compute_correlation(double values1[], double values2[], int length) {
-    // TODO: Use computeCovariance() and functions already implemented
-    // Do not forget to replace this return by a correct one!
-    return 0;
+    double covariance = compute_covariance(values1, values2, length);
+    double sd1 = compute_standard_deviation(values1, length);
+    double sd2 = compute_standard_deviation(values2, length);
+    double correlation = covariance / (sd1 * sd2);
+    return correlation;
 }
 
 /***************************************************
@@ -207,7 +221,14 @@ double** compute_covariance_matrix (double** data_matrix, int rows, int columns)
     // Prepare temporary storage for columns
     double column1[rows], column2[rows];
 
-    // TODO
+    for(int i = 0; i < rows; ++i){
+        get_column(data_matrix, rows, i, column1);
+        for(int j = 0; j < columns; ++j){
+            get_column(data_matrix, rows, j, column2);
+            double cov = compute_covariance(column1, column2, columns);
+            matrix[i][j] = cov;
+        }
+    }
     return matrix;
 }
 
@@ -225,6 +246,13 @@ double** compute_correlation_matrix (double** data_matrix, int rows, int columns
     // Prepare temporary storage for columns
     double column1[rows], column2[rows];
 
-    // TODO
+    for(int i = 0; i < rows; ++i){
+        get_column(data_matrix, rows, i, column1);
+        for(int j = 0; j < columns; ++j){
+            get_column(data_matrix, rows, j, column2);
+            double corr = compute_correlation(column1, column2, columns);
+            matrix[i][j] = corr;
+        }
+    }
     return matrix;
 }
