@@ -121,44 +121,23 @@ int partition(point* P, int start, int end, int c) {
     double m = compute_median(P, start, end, c);
     int idx = -1;  // this is where we store the index of the median
 
-    int left = start;
-    int right = end-1;
+    int median_idx = -1;
+    idx = (start + end) / 2;
+    end--;
 
-    while (left < right){
-        if(P[left][c] == m){
-            std::swap(P[left], P[start]);
-            idx = start;
-            left++;
-            continue;
+    while (start <= end){
+        if(P[start][c] == m){
+            median_idx = start;
+            start++;
         }
-        if(P[right][c] == m){
-            std::swap(P[right], P[end-1]);
-            idx = end-1;
-            right--;
-            continue;
+        else if(P[start][c] > m){
+            std::swap(P[start], P[end]);
+            end--;
         }
-        if (P[left][c] < m){
-            left++;
-            continue;
-        }
-        if (P[right][c] > m){
-            right--;
-            continue;
-        }
-        if (P[left][c] > m && P[right][c] < m){
-            std::swap(P[left], P[right]);
-            left++;
-            right--;
-            continue;
-        }
+        else start++;
     }
-    for (int i = start; i < end; i++){
-        if (P[i][c] > m){
-            std::swap(P[i-1],P[idx]);
-            idx = i-1;
-            break;
-        }
-    }
+    std::swap(P[median_idx], P[idx]);
+
     return idx;
 }
 
