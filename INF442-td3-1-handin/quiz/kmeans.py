@@ -52,9 +52,9 @@ Examples
 
     # generate score curve for elbow heuristic using Sklearn
     print("\nGenerating the score curve...", end='')
-    min_nb_clusters = 11 # Change to 2!
+    min_nb_clusters = 2 # Change to 2!
     max_nb_clusters = 10
-    km = [] # Add the appropriate KMeans objects
+    km = [KMeans(n_clusters=k, random_state=0, init='k-means++', n_init='auto').fit(ndata) for k in range(min_nb_clusters, max_nb_clusters+1)] # Add the appropriate KMeans objects
     score = [km[i].fit(ndata).inertia_ for i in range(max_nb_clusters - min_nb_clusters + 1)]
     print(" done")
 
