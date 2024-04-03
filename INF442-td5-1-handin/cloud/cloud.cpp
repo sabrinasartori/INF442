@@ -30,9 +30,16 @@ point& cloud::get_point(int i) {
 // TODO 2.2.2: implement double cloud::k_dist_knn - distance to k-th nearest neighbor
 double cloud::k_dist_knn(const point& p, int k) const {
 	assert(k <= n);
-
+	
 	double neighbors_dist[k];
+	for(int i=0; i<n; i++){
+		neighbors_dist[i] = p.dist(points[i]);
+	}
+	
+	std::sort(neighbors_dist, neighbors_dist+n);
+
 	return neighbors_dist[k-1];
+
 }
 
 // TODO 2.2.2 if you wish to implement the Optional Exercise 3: return k nearest neighbors
